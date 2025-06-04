@@ -2,41 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Single Cell Value from Google Sheet</title>
+  <title>Live Sheet Value</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-    }
-    #cellValue {
-      font-size: 3em;
-      color: #2a7ae2;
-    }
+    body { font-family: sans-serif; text-align: center; padding-top: 100px; }
+    #cellValue { font-size: 2em; color: #2a7ae2; }
   </style>
 </head>
 <body>
-  <h1>Value in Cell C5</h1>
+  <h1>Live Value from Google Sheet (Cell C5)</h1>
   <div id="cellValue">Loading...</div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzRRTcSHyOiWmj2GUxlLkHC1nVDL2yoIbP2LSaHh3h2l6H_n5qQHXXR8_dCmoMQ3I46/exec";
+    const webAppURL = "https://script.google.com/macros/s/AKfycbxJPKS8OoNlxLhGQQk9lz82c3sbVtNBKTuK44zShAxi1wsAlPVC6WTwsaTcmAGpwvmJ/exec";
 
-    async function updateCellValue() {
+    async function fetchValue() {
       try {
-        const response = await fetch(scriptURL);
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        const response = await fetch(webAppURL);
         const data = await response.json();
-        document.getElementById('cellValue').textContent = data.value ?? "No data found";
-      } catch (err) {
-        console.error('Fetch failed:', err);
-        document.getElementById('cellValue').textContent = "Error fetching data";
+        document.getElementById("cellValue").textContent = data.value || "No data";
+      } catch (error) {
+        console.error("Fetch error:", error);
+        document.getElementById("cellValue").textContent = "Error loading data";
       }
     }
 
-    updateCellValue();
-    setInterval(updateCellValue, 10000); // Refresh every 10 seconds
+    fetchValue();
+    setInterval(fetchValue, 10000); // Optional: refresh every 10 seconds
   </script>
 </body>
 </html>
-
