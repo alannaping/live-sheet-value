@@ -1,31 +1,42 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Live Value from Google Sheet</title>
-    <style>
-      body { font-family: Arial, sans-serif; text-align: center; padding-top: 40px; }
-      #value { font-size: 2em; color: #1a73e8; margin-top: 20px; }
-    </style>
-  </head>
-  <body>
-    <h2>Live Value from Google Sheet (C5)</h2>
-    <div id="value">Loading...</div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Single Cell Value from Google Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    #cellValue {
+      font-size: 3em;
+      color: #2a7ae2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Value in Cell C5</h1>
+  <div id="cellValue">Loading...</div>
 
-    <script>
-      function fetchData() {
-        fetch("https://docs.google.com/spreadsheets/d/1DFxqJLTXlbVNEQad4PTs-cj0etGqxaaXogBwtgYsV8M/edit?gid=0#gid=0")
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById("C2").textContent = data.value;
-          })
-          .catch(error => {
-            console.error("Fetch error:", error);
-            document.getElementById("value").textContent = "Error";
-          });
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzRRTcSHyOiWmj2GUxlLkHC1nVDL2yoIbP2LSaHh3h2l6H_n5qQHXXR8_dCmoMQ3I46/exec";
+
+    async function updateCellValue() {
+      try {
+        const response = await fetch(scriptURL);
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        const data = await response.json();
+        document.getElementById('cellValue').textContent = data.value ?? "No data found";
+      } catch (err) {
+        console.error('Fetch failed:', err);
+        document.getElementById('cellValue').textContent = "Error fetching data";
       }
+    }
 
-      fetchData();
-      setInterval(fetchData, 10000); // Refresh every 10 seconds
-    </script>
-  </body>
+    updateCellValue();
+    setInterval(updateCellValue, 10000); // Refresh every 10 seconds
+  </script>
+</body>
 </html>
+
