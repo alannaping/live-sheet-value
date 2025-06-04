@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Value from Google Sheet</title>
+    <style>
+      body { font-family: Arial, sans-serif; text-align: center; padding-top: 40px; }
+      #value { font-size: 2em; color: #1a73e8; margin-top: 20px; }
+    </style>
+  </head>
+  <body>
+    <h2>Live Value from Google Sheet (C5)</h2>
+    <div id="value">Loading...</div>
+
+    <script>
+      function fetchData() {
+        fetch("https://docs.google.com/spreadsheets/d/1DFxqJLTXlbVNEQad4PTs-cj0etGqxaaXogBwtgYsV8M/edit?gid=0#gid=0")
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("C2").textContent = data.value;
+          })
+          .catch(error => {
+            console.error("Fetch error:", error);
+            document.getElementById("value").textContent = "Error";
+          });
+      }
+
+      fetchData();
+      setInterval(fetchData, 10000); // Refresh every 10 seconds
+    </script>
+  </body>
+</html>
